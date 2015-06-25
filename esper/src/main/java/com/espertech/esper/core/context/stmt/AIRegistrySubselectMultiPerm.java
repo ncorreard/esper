@@ -40,6 +40,8 @@ public class AIRegistrySubselectMultiPerm implements AIRegistrySubselect, ExprSu
 
     public Collection<EventBean> evaluateMatching(EventBean[] eventsPerStream, ExprEvaluatorContext exprEvaluatorContext) {
         int agentInstanceId = exprEvaluatorContext.getAgentInstanceId();
+        if (agentInstanceId == -1)
+            return CollectionUtil.SINGLE_NULL_ROW_EVENT_SET;
         ExprSubselectStrategy strategy = strategies.getArray()[agentInstanceId];
         return strategy.evaluateMatching(eventsPerStream, exprEvaluatorContext);
     }

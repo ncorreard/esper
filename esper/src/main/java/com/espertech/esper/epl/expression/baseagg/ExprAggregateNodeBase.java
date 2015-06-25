@@ -148,12 +148,21 @@ public abstract class ExprAggregateNodeBase extends ExprNodeBase implements Expr
 
 	public final Object evaluate(EventBean[] events, boolean isNewData, ExprEvaluatorContext exprEvaluatorContext)
 	{
-        if (InstrumentationHelper.ENABLED) {
-            Object value = aggregationResultFuture.getValue(column, exprEvaluatorContext.getAgentInstanceId(), events, isNewData, exprEvaluatorContext);
-            InstrumentationHelper.get().qaExprAggValue(this, value);
-            return value;
+        if (aggregationResultFuture == null) {
+            return null;
         }
-        return aggregationResultFuture.getValue(column, exprEvaluatorContext.getAgentInstanceId(), events, isNewData, exprEvaluatorContext);
+		
+        Object value;
+        if (InstrumentationHelper.ENABLED) {
+            value = aggregationResultFuture.getValue(column, exprEvaluatorContext.getAgentInstanceId(), events,
+                    isNewData, exprEvaluatorContext);
+            InstrumentationHelper.get().qaExprAggValue(this, value);
+        } else {
+            value = aggregationResultFuture.getValue(column, exprEvaluatorContext.getAgentInstanceId(), events,
+                    isNewData, exprEvaluatorContext);
+
+        }
+        return value;
 	}
 
     /**
